@@ -1,3 +1,12 @@
+/*
+Department Store Management System
+- Options
+- Add Product
+- Delete Product
+- Edit Product
+- Exit the program
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,8 +14,6 @@
 
 #define MAX 20
 
-
-// Struct definitions
 typedef struct items
 {
     char itemCode[MAX];
@@ -18,6 +25,7 @@ typedef struct items
 
 Item item;
 
+
 void options();
 int isCodeAvailable();
 void addProd();
@@ -28,7 +36,7 @@ void display();
 int main()
 {
     options();
-    system("cls");
+    system("clear");
     return 0;
 }
 
@@ -53,30 +61,29 @@ void options()
         switch(choice)
         {
         case 1:
-            system("cls");
+            system("clear");
             addProd();
             break;
         case 2:
-            system("cls");
+            system("clear");
             deleteProd();
             break;
         case 3:
-            system("cls");
+            system("clear");
             editProd();
             break;
         case 4:
-            system("cls");
+            system("clear");
             display();
             break;
         case 5:
-            system("cls");
+            system("clear");
             printf("\n\n\n\n\n\n\n\n\n\n");
             printf("\n\n\n\t\t\t\t\t    Thanks for using my program!\n\n\n");
-            getch();
             exit(0);
             break;
         default:
-            printf("\n\t\t\t\t\tWrong entry. Enter a number between 0 & 6\n\n\n");
+            printf("\n\t\t\t\t\tWrong entry. Enter a number between 1 & 5\n\n\n");
             break;
         }
     } while (choice != 5);
@@ -113,6 +120,7 @@ void addProd()
 {
     char code[MAX];
     FILE *file;
+    // file = fopen("name", "mode");
     file = fopen("Record.txt", "a");
     if(file == NULL)
     {
@@ -121,7 +129,7 @@ void addProd()
     }
 
     display();
-jump:
+    jump:
     printf("\t\t\t\t\t    *****ADDING A PRODUCT*****\n\n");
     printf("\t\t\t\t   Enter \"end\" if you want to go back to main menu\n\n");
     printf("\t\t\t\t\t\tProduct Code:");
@@ -130,7 +138,7 @@ jump:
     // If the user entered "end", the program will exist the function
     if (strcmp(code, "end") == 0)
     {
-        system("cls");
+        system("clear");
         options();
     }
 
@@ -139,7 +147,7 @@ jump:
     if(isCodeAvailable(code) == 1)
     {
         printf("\n\n\t\t\t\t\tProduct already exists!\n\n\n");
-        getch();
+
         // Goes to jump if the product already
         // exists to reprompt the user for input
         goto jump;
@@ -189,7 +197,7 @@ void deleteProd()
     }
 
     display();
-jump:
+    jump:
     printf("\t\t\t\t\t    *****DELETING A PRODUCT*****\n\n");
     printf("\t\t\t\t   Enter \"end\" if you want to go back to main menu\n\n");
     printf("\t\t\t\t   Enter the code of the product you want to delete: ");
@@ -198,7 +206,7 @@ jump:
     // If the user entered "end", the program will exist the function
     if (strcmp(code, "end") == 0)
     {
-        system("cls");
+        system("clear");
         options();
     }
 
@@ -207,7 +215,7 @@ jump:
     if(isCodeAvailable(code) == 0)
     {
         printf("\n\n\t\t\t\t\t\tProduct doesn't exist!\n\n\n");
-        getch();
+
         goto jump;
     }
 
@@ -257,7 +265,7 @@ void editProd()
     FILE *file1, *file2;
 
     display();
-jump:
+    jump:
     printf("\t\t\t\t\t    *****UPDATING A PRODUCT*****\n\n");
     printf("\t\t\t\t   Enter \"end\" if you want to go back to main menu\n\n");
     printf("\t\t\t\t   Enter the code of the product you want to edit: ");
@@ -266,7 +274,7 @@ jump:
     // If the user entered "end", the program will exist the function
     if (strcmp(code, "end") == 0)
     {
-        system("cls");
+        system("clear");
         options();
     }
 
@@ -275,7 +283,7 @@ jump:
     if(isCodeAvailable(code) == 0)
     {
         printf("\n\n\t\t\t\t\t\tProduct doesn't exist!\n\n\n");
-        getch();
+
         goto jump;
     }
 
@@ -386,9 +394,9 @@ void display()
     /* If no items were found */
     if (count == 0)
     {
-        system("cls");
+        system("clear");
         printf("\n\t\t\t\t\t   *No products available in store\n\n\n");
-        getch();
+
     }
     fclose(file);
 }
