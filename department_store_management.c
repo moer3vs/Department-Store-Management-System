@@ -4,6 +4,7 @@ Department Store Management System
 - Add Product
 - Delete Product
 - Edit Product
+- Calculate Bill
 - Exit the program
 */
 
