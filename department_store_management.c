@@ -10,8 +10,9 @@ Department Store Management System
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <windows.h>
 
-
+#define CLEAR "cls"
 #define MAX 20
 
 typedef struct items
@@ -28,6 +29,7 @@ Item item;
 
 void options();
 int isCodeAvailable();
+void calculateBill();
 void addProd();
 void deleteProd();
 void editProd();
@@ -36,7 +38,7 @@ void display();
 int main()
 {
     options();
-    system("clear");
+    system(CLEAR);
     return 0;
 }
 
@@ -49,11 +51,12 @@ void options()
     {
         printf("\t\t\t\t\t******DEPARTMENT STORE MANAGEMENT******");
         printf("\n\t\t\t\t\t---------------------------------------");
-        printf("\n\t\t\t\t\t\t1. ADD A PRODUCT");
-        printf("\n\t\t\t\t\t\t2. DELETE A PRODUCT");
-        printf("\n\t\t\t\t\t\t3. EDIT A PRODUCT");
-        printf("\n\t\t\t\t\t\t4. DISPLAY STORE");
-        printf("\n\t\t\t\t\t\t5. EXIT THE RROGRAM");
+        printf("\n\t\t\t\t\t\t1. CALCULATE BILL");
+        printf("\n\t\t\t\t\t\t2. ADD A PRODUCT");
+        printf("\n\t\t\t\t\t\t3. DELETE A PRODUCT");
+        printf("\n\t\t\t\t\t\t4. EDIT A PRODUCT");
+        printf("\n\t\t\t\t\t\t5. DISPLAY STORE");
+        printf("\n\t\t\t\t\t\t6. EXIT THE RROGRAM");
         printf("\n\t\t\t\t\t---------------------------------------\n");
         printf("\t\t\t\t\tEnter your choice: ");
         scanf("%d", &choice);
@@ -61,32 +64,36 @@ void options()
         switch(choice)
         {
         case 1:
-            system("clear");
-            addProd();
+            system(CLEAR);
+            calculateBill();
             break;
         case 2:
-            system("clear");
-            deleteProd();
+            system(CLEAR);
+            addProd();
             break;
         case 3:
-            system("clear");
-            editProd();
+            system(CLEAR);
+            deleteProd();
             break;
         case 4:
-            system("clear");
-            display();
+            system(CLEAR);
+            editProd();
             break;
         case 5:
-            system("clear");
+            system(CLEAR);
+            display();
+            break;
+        case 6:
+            system(CLEAR);
             printf("\n\n\n\n\n\n\n\n\n\n");
             printf("\n\n\n\t\t\t\t\t    Thanks for using my program!\n\n\n");
             exit(0);
             break;
         default:
-            printf("\n\t\t\t\t\tWrong entry. Enter a number between 1 & 5\n\n\n");
+            printf("\n\t\t\t\t\tWrong entry. Enter a number between 1 & 6\n\n\n");
             break;
         }
-    } while (choice != 5);
+    } while (choice != 6);
 }
 
 // A function to check if the code is already available
@@ -138,7 +145,7 @@ void addProd()
     // If the user entered "end", the program will exist the function
     if (strcmp(code, "end") == 0)
     {
-        system("clear");
+        system(CLEAR);
         options();
     }
 
@@ -206,7 +213,7 @@ void deleteProd()
     // If the user entered "end", the program will exist the function
     if (strcmp(code, "end") == 0)
     {
-        system("clear");
+        system(CLEAR);
         options();
     }
 
@@ -274,7 +281,7 @@ void editProd()
     // If the user entered "end", the program will exist the function
     if (strcmp(code, "end") == 0)
     {
-        system("clear");
+        system(CLEAR);
         options();
     }
 
@@ -394,10 +401,104 @@ void display()
     /* If no items were found */
     if (count == 0)
     {
-        system("clear");
+        system(CLEAR);
         printf("\n\t\t\t\t\t   *No products available in store\n\n\n");
 
     }
     fclose(file);
 }
 
+void calculateBill()
+{
+    FILE *file1, *file2;
+    COORD c;
+    char code[MAX];
+    int quantity = 0, itemCounter = 1, coordY = 16;
+    float total = 0, totalBill = 0;
+
+    c.X = 4;
+    c.Y = 13;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+    //printf("S.N \t\tProduct name \t\tProduct code \t\tAmount \t\t\tPrice \t\tTotal");
+    printf("\t\t\t--------------------------------------------------------------------------------------");
+
+    c.X = 4;
+    c.Y = 14;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+    printf("\t\t\t S.N\t||    CODE\t||    NAME\t||     RATE\t||   QUANTITY   ||  TOTAL ");
+
+    c.X = 4;
+    c.Y = 15;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+    printf("\t\t\t--------------------------------------------------------------------------------------");
+
+
+    while(1)
+    {
+        c.X = 50;
+        c.Y = 7;
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+        printf("Enter \"end\" if you want to exit.");
+
+        c.X = 50;
+        c.Y = 8;
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+        printf("Enter product code:");
+        scanf("%s", code);
+
+        if (strcmp(code, "end") == 0)
+        {
+            c.X = 50;
+            c.Y = coordY + 3;
+            SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+            printf("Total bill: $ %.2f", totalBill);
+            getch();
+            break;
+        }
+
+        c.X = 50;
+        c.Y = 9;
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+        printf("Enter Quantity:");
+        scanf("%d", &quantity);
+
+        file1 = fopen("Record.txt", "r");
+        file2 = fopen("Update.txt", "w");
+        while(fread(&item, sizeof(item), 1, file1))
+        {
+            if((strcmp (code, item.itemCode)) == 0)
+            {
+                total = quantity * item.rate;           // Total of a single item
+                totalBill += total;                     // Total of all items purchased
+                item.quantity -= quantity;              // Updating the item's quantity value
+
+                c.X = 4;
+                c.Y = coordY;
+                SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+                printf("\t\t\t   %d\t||     %s\t||   %s\t||     %.2f\t||      %d\t||   %.2f\n", itemCounter, item.itemCode, item.itemName, item.rate, quantity, total);
+                coordY++;                               // Incrementing the Y-coordinate to print the next item on a newline
+                itemCounter++;                          // Item counter to determine how many items purchased
+                fwrite(&item, sizeof(item), 1, file2);  // Writing the data into file2 so that we can update the quantity value later by overwriting the original file1
+            }
+            else
+            {
+                fwrite(&item, sizeof(item), 1, file2);
+            }
+        }
+        fclose(file1);
+        fclose(file2);
+
+        /*
+        Updating the original file's quantity values by overwriting
+        the data in it using the temporary file2.
+        */
+        file1 = fopen("Record.txt", "w");
+        file2 = fopen("Update.txt", "r");
+        while(fread(&item, sizeof(item), 1, file2))
+        {
+            fwrite(&item, sizeof(item), 1, file1);
+        }
+        fclose(file1);
+        fclose(file2);
+    }
+}
